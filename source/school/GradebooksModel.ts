@@ -1,3 +1,5 @@
+import { group_schema } from "./schemes/groups";
+import { teacher_schema } from "./schemes/teacher";
 
 export class GradebooksModel{
     gradebook: Map<any, any>;
@@ -7,7 +9,7 @@ export class GradebooksModel{
     lms: any;
     id: string;
 
-    constructor(groups, teachers, lms)
+    constructor(groups : group_schema, teachers : teacher_schema, lms :object)
     {
         this.gradebook = new Map();
         this.mainbook = [];
@@ -17,8 +19,8 @@ export class GradebooksModel{
         this.id = "";
     }
 
-    async add(level, groupId){
-        let obj = {};
+    async add(level : number, groupId : string){
+        let obj : group_schema;
         const GenerateID =  () => {return '_' + Math.random().toString(36).substr(2, 9) };
         this.id = GenerateID();
         obj.id = this.id;

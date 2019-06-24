@@ -1,30 +1,26 @@
 import {group_schema} from './schemes/groups';
+import {pupil_schema} from './schemes/pupil';
 export class GroupsModel {
-    groups: Map<any, any>;
-    pupils: Map<any, any>;
+    groups: Map<string, group_schema>;
+    pupils: Map<string, pupil_schema>;
     constructor(){
         this.groups = new Map();
         this.pupils = new Map();
     }
     async add (room : number, level =1)
     {
-        if (typeof room !== 'number' || typeof level !== 'number' )
-            throw new TypeError('Can\'t add')   
-        else
+        const id =  () => {return '_' + Math.random().toString(36).substr(2, 9) };
+        var privateID = id();
+        var pupils = this.pupils;
+        let group : group_schema = 
         {
-            const id =  () => {return '_' + Math.random().toString(36).substr(2, 9) };
-            var privateID = id();
-            var pupils = this.pupils;
-            let group = 
-            {
-                privateID,
-                room ,
-                level ,
-                pupils
-            }
-            this.groups.set(privateID, group );
-            return privateID;
+            privateID,
+            room ,
+            level ,
+            pupils
         }
+        this.groups.set(privateID, group );
+        return privateID; 
     }
 
     async addPupil(groupID :string, pupilID : string)

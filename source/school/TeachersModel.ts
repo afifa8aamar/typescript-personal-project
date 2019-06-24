@@ -1,6 +1,6 @@
 import {teacher_schema} from './schemes/teacher';
 export class TeachersModel {
-  teachers: Map<any, any>;
+  teachers: Map<string, teacher_schema>;
     constructor(){
         this.teachers = new Map();
     }
@@ -13,7 +13,7 @@ export class TeachersModel {
     }
     async read (id : string)
     {
-      if (typeof id !== 'string' || this.teachers.get(id) == 'undefined')
+      if (!this.teachers.get(id))
           throw new TypeError("Invalid ID")
       else {
           var teacher = this.teachers.get(id);
@@ -30,7 +30,7 @@ export class TeachersModel {
 
     }
 
-    async update (currentID : string, obj :any )
+    async update (currentID : string, obj : any )
     {
         if ( this.teachers.get(currentID) == void 0)
           throw new TypeError('Can\'t Update');

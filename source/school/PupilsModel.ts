@@ -1,6 +1,6 @@
 import {pupil_schema} from './schemes/pupil';
 export class PupilsModel {
-  pupils: Map<any, any>;
+  pupils: Map<string, pupil_schema>;
     constructor(){
         this.pupils = new Map();
     }
@@ -13,7 +13,7 @@ export class PupilsModel {
     }
     async read (id : string)
     {
-      if (typeof id !== 'string' || this.pupils.get(id) == 'undefined')
+      if (!this.pupils.get(id))
           throw new TypeError('Can\'t read')
       else {
           var pupils = this.pupils.get(id);
