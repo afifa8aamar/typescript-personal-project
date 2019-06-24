@@ -1,1 +1,1 @@
-require('./build/main.js');
+require('./build/example-7');
