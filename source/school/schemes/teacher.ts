@@ -1,29 +1,29 @@
 export interface teacher_schema  {
-    "name": {
-      "first": String,
-      "last": String
+    name ?: {
+      first ? : String,
+      last ? : String
     },
-    "image": String,
-    "dateOfBirth": String,
-    "emails": [
+    image ? : String,
+    dateOfBirth ? : String,
+    emails ? : [
       {
-        "email": String,
-        "primary": Boolean
+        email ?: String,
+        primary ?: Boolean
       }
     ],
-    "phones": [
+    phones ? : [
       {
-        "phone": String,
-        "primary": Boolean
+        phone ? : String,
+        primary ? : Boolean
       }
     ],
-    "sex": String,
-    "subjects": [
+    sex ? : String,
+    subjects ? : [
       {
-        "subject": String
+        subject ? : String
       }
     ],
-    "description": String,
+    description ?: String,
   }
   
   

@@ -39,7 +39,7 @@ export class GradebooksModel{
         this.lms = {};
     }
 
-    async addRecord(gradebookId, record){
+    async addRecord(gradebookId : string , record : object){
         
         let name = "";
         let tmp = this.groups.pupils

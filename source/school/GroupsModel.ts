@@ -29,13 +29,13 @@ export class GroupsModel {
         var pupils = [...this.pupils];
         var room = this.groups.get(groupID).room;
         var level = this.groups.get(groupID).level;
-        let group = {
+        let group : group_schema= {
             groupID,
             room ,
             level ,
             pupils
         };
-        let oldData = this.groups.get(groupID);
+        let oldData : group_schema = this.groups.get(groupID);
         this.groups.set(groupID,{...oldData, ...group});
         return (`Added ${pupilID} to ${groupID}`)
     }
