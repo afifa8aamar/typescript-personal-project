@@ -1,8 +1,9 @@
 import { group_schema } from "./schemes/groups";
 import { teacher_schema } from "./schemes/teacher";
+import { records } from "./schemes/record";
 
 export class GradebooksModel{
-    gradebook: Map<any, any>;
+    gradebook: Map<string, object>;
     mainbook: any[];
     groups: any;
     teachers: any;
@@ -39,7 +40,7 @@ export class GradebooksModel{
         this.lms = {};
     }
 
-    async addRecord(gradebookId : string , record : object){
+    async addRecord(gradebookId : string , record : records){
         
         let name = "";
         let tmp = this.groups.pupils
@@ -65,7 +66,7 @@ export class GradebooksModel{
         this.mainbook.push(finalobj);
     }
 
-    async read(first, second){
+    async read(first : string , second : string ){
         for(let i = 0; i < this.mainbook.length; i++)
         {
             if(this.mainbook[i].gradebookid == first && this.mainbook[i].idpupil == second)
@@ -75,7 +76,7 @@ export class GradebooksModel{
         }
     }
 
-    async readAll(mainid)
+    async readAll(mainid : string)
     {
         let result = [];
         for(let i=0; i<this.mainbook.length; i++)
