@@ -1,8 +1,8 @@
 import { GroupsModel } from "./GroupsModel";
 import { IGradebookSchema } from "./schemes/gradebook";
-import { LMSModel } from "./LMSModel";
 import { IRecords } from "./schemes/record";
 import { ISubjectSchema } from "./schemes/subject";
+import { LMSModel } from "./LMSModel";
 import { TeachersModel } from "./TeachersModel";
 
 export class GradebooksModel {
@@ -23,32 +23,30 @@ export class GradebooksModel {
     }
 
     public async readAll(mainid: string) {
-        let result = [];
-        for (let i = 0; i < this.mainbook.length; i++) {
-            if (this.mainbook[i].gradebookid == mainid) {
-                result.push(this.mainbook[i].record);
+        const result = [];
+        for (const item of this.mainbook) {
+            if (item.gradebookid === mainid) {
+                result.push(item.record);
             }
         }
         return result;
     }
-
-
-    public async read(gradebookid: string, pupilId: string) {
-        for (let i = 0; i < this.mainbook.length; i++) {
-            if (this.mainbook[i] && this.mainbook[i].record) {
-                let record: IRecords | undefined = this.mainbook[i].record
-                if (this.mainbook[i].gradebookid == gradebookid && record == pupilId) {
-                    let temp = this.mainbook[i].record;
+    public async read(gradebookid: string, pupilId: string): Promise<IRecords> {
+        let temp ;
+        for (const item of this.mainbook) {
+            if (item && item.record) {
+                const record: IRecords | undefined = item.record;
+                if (item.gradebookid === gradebookid && record === pupilId) {
+                    temp = item.record;
                 }
             }
         }
+        return temp as IRecords;
     }
-
-
     public async addRecord(gradebookId: string, record: IRecords) {
         let pupilFullName;
         if (record.pupilId) {
-            let pupil = this.groups.pupils.get(record.pupilId);
+            const pupil = this.groups.pupils.get(record.pupilId);
             if (pupil && pupil.name) {
                 pupilFullName = `${pupil.name.first} ${pupil.name.last}`;
             }
@@ -59,9 +57,10 @@ export class GradebooksModel {
         const mark = record.mark;
         let teacherFullName;
         if (teacherId) {
-            let teacher = await this.teachers.read(teacherId);
-            if (teacher && teacher.name)
+            const teacher = await this.teachers.read(teacherId);
+            if (teacher && teacher.name) {
                 teacherFullName = `${teacher.name.first} ${teacher.name.last}`;
+            }
         }
         const subject: ISubjectSchema[] = await this.lms.readAll();
         let subjectTitle: string | undefined;
