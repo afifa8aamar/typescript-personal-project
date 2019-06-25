@@ -1,16 +1,22 @@
 import { group_schema } from "./schemes/groups";
 import { teacher_schema } from "./schemes/teacher";
 import { records } from "./schemes/record";
+import { gradebook_schema, record_schema } from "./schemes/gradebook";
+import { subject_schema } from "./schemes/subject";
+import { GroupsModel } from "./GroupsModel";
+import { TeachersModel } from "./TeachersModel";
+import { LMSModel } from "./LMSModel";
+import { SubjectsModel } from "./SubjectsModel";
 
 export class GradebooksModel{
-    gradebook: Map<string, object>;
-    mainbook: any[];
-    groups: any;
-    teachers: any;
-    lms: any;
+    gradebook: Map<string, gradebook_schema>;
+    mainbook: gradebook_schema[];
+    groups: GroupsModel;
+    teachers: TeachersModel;
+    lms: LMSModel;
     id: string;
 
-    constructor(groups : group_schema, teachers : teacher_schema, lms :object)
+    constructor(groups : GroupsModel, teachers: TeachersModel, lms :LMSModel)
     {
         this.gradebook = new Map();
         this.mainbook = [];
@@ -21,55 +27,53 @@ export class GradebooksModel{
     }
 
     async add(level : number, groupId : string){
-        let obj : group_schema;
+        let obj : gradebook_schema;
         const GenerateID =  () => {return '_' + Math.random().toString(36).substr(2, 9) };
         this.id = GenerateID();
-        obj.id = this.id;
+        obj.gradebookid = this.id;
         obj.level = level;
         obj.groupid = groupId;
-        if(typeof groupId !== "string") 
-            throw new Error('invalid id');
         this.gradebook.set(this.id, obj);
         return this.id;
     }
 
-    async clear()
-    {
-        this.groups = {};
-        this.teachers = {};
-        this.lms = {};
+    async clear() {
+        this.groups.clear();
+        this.teachers.clear();
+        this.lms.clear();
     }
 
     async addRecord(gradebookId : string , record : records){
         
-        let name = "";
-        let tmp = this.groups.pupils
-        for(let i = 0; i < tmp.size; i++ ){
-            if( tmp.pupil.id == record.pupilId){
-                name = `${tmp[i].pupil.name.first} ${tmp[i].pupil.name.last}`;
-            }
-        }
+        let tmp = this.groups.pupils.get(record.pupilId)
+        let pupil = this.groups.pupils.get(record.pupilId)
+        let pupilFullName = `${pupil.name.first} ${pupil.name.last}`;
         let teacherId = record.teacherId;
         let subjectId = record.subjectId;
         let lesson = record.lesson;
         let mark = record.mark ;
-        let teacher = `${this.teachers.teachers.get(teacherId).name.first} ${this.teachers.teachers.get(teacherId).name.last}`;
-        let subject =  this.lms.lms
-        subject = Array.from(subject)
-        subject = subject[0].title
+        let teacher = await this.teachers.read(teacherId);
+        let teacherFullName =  `${teacher.name.first} ${teacher.name.last}`;
+        let subject: subject_schema[] = await this.lms.readAll()
+        let subjectTitle : string;
+        for (var i = 0 ; i < subject.length ; i ++)
+        {
+            if ( record.lesson == subject[i].lessons)
+                 subjectTitle = subject[i].title
+        }
         let obj = {
-            name,
-            records: [ { teacher,subject,lesson,mark } ]
+            pupilFullName,
+            records: [ { teacher,subjectTitle,lesson,mark } ]
         };
         
-        let finalobj = {gradebookid: gradebookId, record:  obj, idpupil: record.pupilId};
+        let finalobj : gradebook_schema = {gradebookid: gradebookId, record:  obj, idpupil: record.pupilId};
         this.mainbook.push(finalobj);
     }
 
     async read(first : string , second : string ){
         for(let i = 0; i < this.mainbook.length; i++)
         {
-            if(this.mainbook[i].gradebookid == first && this.mainbook[i].idpupil == second)
+            if(this.mainbook[i].gradebookid == first && this.mainbook[i].record.pupilId == second)
             {
                 return this.mainbook[i].record;
             }

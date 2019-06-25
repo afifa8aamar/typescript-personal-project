@@ -1,7 +1,7 @@
 import {subject_schema} from './schemes/subject'
 export class SubjectsModel {
-    id: string;
-    subject: { title: string; lessons: number; description: string; };
+    id ? : string;
+    subject ? :subject_schema;
     constructor(subject : subject_schema){
         const f =  () => {return '_' + Math.random().toString(36).substr(2, 9) };
         this.id = (f()).toString();

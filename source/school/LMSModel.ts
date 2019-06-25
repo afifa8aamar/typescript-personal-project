@@ -1,31 +1,36 @@
 import {subject_schema} from './schemes/subject';
 export class LMSModel {
-    lms: Set<unknown>;
+    lms: subject_schema[];
     constructor(){
-        this.lms = new Set();
+        this.lms = [];
     }
 
-    async add(subject : subject_schema)
+    async add(subject : object)
     {
-        this.lms.add(subject.subject);
+        this.lms.push(subject);
         return 'Resolved';
 
     }
-    async verify (subject : subject_schema)
+    async verify (subject : object)
     {
-        return this.lms.has(subject.subject);
+        for (let i = 0 ; i < this.lms.length ; i++)
+            if (this.lms[i] == subject)
+                return true;
+        return false;
     }
-    async remove (subject : subject_schema)
+    async remove (subject : object)
     {
-        if (this.lms.has(subject.subject))
-            {
-                let l = this.lms.delete(subject.subject);
-                return 'Removed'
-            }
+        for (let i = 0 ; i < this.lms.length ; i++)
+            if (this.lms[i] == subject)
+                this.lms[i] == null;
         else throw new TypeError('Can\'t Remove');
     }
     async readAll()
     {
         return [...this.lms]
+    }
+    clear ()
+    {
+        this.lms = [];
     }
 }

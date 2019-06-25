@@ -11,46 +11,24 @@ export class PupilsModel {
       this.pupils.set(privateID, pupil);
       return privateID;
     }
-    async read (id : string)
+    async read (id : string) : Promise<pupil_schema>
     {
       if (!this.pupils.get(id))
           throw new TypeError('Can\'t read')
-      else {
-          var pupils = this.pupils.get(id);
-          var obj = { id , ...pupils }
-          return (obj);
-      }
+      else return this.pupils.get(id);
     }
 
-    async update (currentID:string , obj : any)
+    async update (currentID:string , obj : pupil_schema)
     {
       if ( this.pupils.get(currentID) == void 0)
         throw new TypeError('Can\'t Update');
       else
       {
         let current = this.pupils.get(currentID);
-        for ( var i  = 0 ; i < Object.keys(obj).length; i++)
-        {
-          if(Array.isArray(obj[Object.keys(obj)[i]]))
-          {
-            for (let i = 0 ; i < obj[Object.keys(obj)[i]].length ; i++)
-            {
-              this.update(currentID , obj[Object.keys(obj)[i]])
-            }
-          }
-          if (typeof obj[Object.keys(obj)[i]] == 'object')
-          {
-            this.update(currentID , obj[Object.keys(obj)[i]])
-          }
-          if (Object.keys(obj)[i] == Object.keys(current)[i])
-          {
-            this.pupils.set(currentID,{...current, ...obj});
-          }
-        }
-        return currentID
+        this.pupils.set(currentID,{...current, ...obj});
       }
+        return currentID
     }
-
 
 
     async remove(id : string)

@@ -11,15 +11,18 @@ export class TeachersModel {
       this.teachers.set(privateID, teacher);
       return privateID;
     }
-    async read (id : string)
+    async read (id : string):Promise<teacher_schema>
     {
       if (!this.teachers.get(id))
           throw new TypeError("Invalid ID")
       else {
-          var teacher = this.teachers.get(id);
-          var obj = { id , ...teacher }
-          return obj ; 
+          var teacher:teacher_schema = this.teachers.get(id);
+          return teacher ; 
       }
+    }
+    clear ()
+    {
+      this.teachers.clear();
     }
     async remove(id : string)
     {
@@ -30,33 +33,15 @@ export class TeachersModel {
 
     }
 
-    async update (currentID : string, obj : any )
+    async update (currentID : string, obj : teacher_schema  )
     {
-        if ( this.teachers.get(currentID) == void 0)
-          throw new TypeError('Can\'t Update');
-        else
-        {
-          let current = this.teachers.get(currentID);
-          for ( var i  = 0 ; i < Object.keys(obj).length; i++)
-          {
-            if(Array.isArray(obj[Object.keys(obj)[i]]))
-            {
-              for (let i = 0 ; i < obj[Object.keys(obj)[i]].length ; i++)
-              {
-                this.update(currentID , obj[Object.keys(obj)[i]])
-              }
-            }
-            if (typeof obj[Object.keys(obj)[i]] == 'object')
-            {
-              this.update(currentID , obj[Object.keys(obj)[i]])
-            }
-            if (Object.keys(obj)[i] == Object.keys(current)[i])
-            {
-              this.teachers.set(currentID,{...current, ...obj});
-            }
-          }
-          return currentID;
-        }
+      if ( this.teachers.get(currentID) == void 0)
+        throw new TypeError('Can\'t Update');
+      else{
+        let current = this.teachers.get(currentID);
+        this.teachers.set(currentID,{...current, ...obj});
+      }
+        return currentID;
     }
 
 

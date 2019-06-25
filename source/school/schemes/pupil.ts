@@ -1,16 +1,16 @@
 export interface pupil_schema {
+    pupilid? : string
     name ? : {
       first ? : string,
       last ? : string
     },
     image ? : string,
     dateOfBirth ? : string, 
-    phones ? : [
+    phones ? : 
       {
         phone ? : string,
         primary: boolean
-      }
-    ],
+      }[],
     sex ? : string,
     description ? : string
   }

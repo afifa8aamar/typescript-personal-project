@@ -1,28 +1,26 @@
-export interface teacher_schema  {
+export interface teacher_schema {
+    teacherid ? : string;
     name ?: {
       first ? : String,
       last ? : String
     },
     image ? : String,
     dateOfBirth ? : String,
-    emails ? : [
+    emails ? : 
       {
         email ?: String,
         primary ?: Boolean
-      }
-    ],
-    phones ? : [
+      }[],
+    phones ? : 
       {
         phone ? : String,
         primary ? : Boolean
-      }
-    ],
+      }[],
     sex ? : String,
-    subjects ? : [
+    subjects ? : 
       {
         subject ? : String
-      }
-    ],
+      }[],
     description ?: String,
   }
   

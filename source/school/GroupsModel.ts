@@ -9,35 +9,35 @@ export class GroupsModel {
     }
     async add (room : number, level =1)
     {
-        const id =  () => {return '_' + Math.random().toString(36).substr(2, 9) };
-        var privateID = id();
+        const privateID =  () => {return '_' + Math.random().toString(36).substr(2, 9) };
+        var id = privateID();
         var pupils = this.pupils;
         let group : group_schema = 
         {
-            privateID,
+            id ,
             room ,
             level ,
             pupils
         }
-        this.groups.set(privateID, group );
-        return privateID; 
+        this.groups.set(id, group );
+        return id; 
     }
 
-    async addPupil(groupID :string, pupilID : string)
+    async addPupil(groupID :string, pupil : pupil_schema)
     {
-        this.pupils.set(groupID,pupilID);
-        var pupils = [...this.pupils];
+        this.pupils.set(groupID , pupil );
+        var pupils = this.pupils;
         var room = this.groups.get(groupID).room;
         var level = this.groups.get(groupID).level;
-        let group : group_schema= {
-            groupID,
+        let group : group_schema = {
+            id : groupID,
             room ,
             level ,
-            pupils
+            pupils 
         };
         let oldData : group_schema = this.groups.get(groupID);
         this.groups.set(groupID,{...oldData, ...group});
-        return (`Added ${pupilID} to ${groupID}`)
+        return (`Added ${pupil.pupilid} to ${groupID}`)
     }
     async removePupil(groupID:string , pupilID : string)
     {
@@ -59,7 +59,7 @@ export class GroupsModel {
         else throw new TypeError('Invalid ID');
     }
 
-    async update (currentID : string ,obj : any)
+    async update (currentID : string ,obj : group_schema)
     {
         if ( this.groups.get(currentID) == void 0)
         {
@@ -73,6 +73,10 @@ export class GroupsModel {
         }
     }
 
+    clear ()
+    {
+        this.groups.clear();
+    }
     
     readAll()
     {
