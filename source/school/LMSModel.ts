@@ -6,11 +6,10 @@ export class LMSModel {
     }
     public async add(subject: object) {
         this.lms.push(subject);
-        return 'Resolved';
+        return "Resolved";
     }
     public async verify(subject: object) {
-        for (const item of this.lms )
-        {
+        for (const item of this.lms ) {
             if (item === subject) {
                 return true;
             }
