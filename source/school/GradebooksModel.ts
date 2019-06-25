@@ -1,7 +1,7 @@
 import { group_schema } from "./schemes/groups";
 import { teacher_schema } from "./schemes/teacher";
 import { records } from "./schemes/record";
-import { gradebook_schema, record_schema } from "./schemes/gradebook";
+import { gradebook_schema } from "./schemes/gradebook";
 import { subject_schema } from "./schemes/subject";
 import { GroupsModel } from "./GroupsModel";
 import { TeachersModel } from "./TeachersModel";
@@ -27,7 +27,7 @@ export class GradebooksModel{
     }
 
     async add(level : number, groupId : string){
-        let obj : gradebook_schema;
+        let obj : gradebook_schema = {};
         const GenerateID =  () => {return '_' + Math.random().toString(36).substr(2, 9) };
         this.id = GenerateID();
         obj.gradebookid = this.id;
@@ -63,10 +63,10 @@ export class GradebooksModel{
         }
         let obj = {
             pupilFullName,
-            records: [ { teacher,subjectTitle,lesson,mark } ]
+            records: [ { teacherFullName,subjectTitle,lesson,mark } ]
         };
         
-        let finalobj : gradebook_schema = {gradebookid: gradebookId, record:  obj, idpupil: record.pupilId};
+        let finalobj : gradebook_schema = {gradebookid: gradebookId, record , pupilid: record.pupilId};
         this.mainbook.push(finalobj);
     }
 
@@ -75,7 +75,7 @@ export class GradebooksModel{
         {
             if(this.mainbook[i].gradebookid == first && this.mainbook[i].record.pupilId == second)
             {
-                return this.mainbook[i].record;
+                let temp =  this.mainbook[i].record;
             }
         }
     }
