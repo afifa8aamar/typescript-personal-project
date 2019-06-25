@@ -1,8 +1,8 @@
-import {group_schema} from './schemes/groups';
-import {pupil_schema} from './schemes/pupil';
+import {IGroupSchema} from './schemes/groups';
+import {IPupilSchema} from './schemes/pupil';
 export class GroupsModel {
-    groups: Map<string, group_schema>;
-    pupils: Map<string, pupil_schema>;
+    groups: Map<string, IGroupSchema>;
+    pupils: Map<string, IPupilSchema>;
     constructor(){
         this.groups = new Map();
         this.pupils = new Map();
@@ -12,7 +12,7 @@ export class GroupsModel {
         const privateID =  () => {return '_' + Math.random().toString(36).substr(2, 9) };
         var id = privateID();
         var pupils = this.pupils;
-        let group : group_schema = 
+        let group : IGroupSchema = 
         {
             id ,
             room ,
@@ -23,19 +23,23 @@ export class GroupsModel {
         return id; 
     }
 
-    async addPupil(groupID :string, pupil : pupil_schema)
+    async addPupil(groupID :string, pupil : IPupilSchema)
     {
         this.pupils.set(groupID , pupil );
         var pupils = this.pupils;
-        var room = this.groups.get(groupID).room;
-        var level = this.groups.get(groupID).level;
-        let group : group_schema = {
+        let room : number | undefined , level ;
+        let tmpGroup = this.groups.get(groupID) ;
+        if (tmpGroup) {
+            room = tmpGroup.room as number;
+            level = tmpGroup.level as number;
+        }
+        let group : IGroupSchema = {
             id : groupID,
             room ,
             level ,
             pupils 
         };
-        let oldData : group_schema = this.groups.get(groupID);
+        let oldData : IGroupSchema = this.groups.get(groupID);
         this.groups.set(groupID,{...oldData, ...group});
         return (`Added ${pupil.pupilid} to ${groupID}`)
     }
@@ -59,7 +63,7 @@ export class GroupsModel {
         else throw new TypeError('Invalid ID');
     }
 
-    async update (currentID : string ,obj : group_schema)
+    async update (currentID : string ,obj : IGroupSchema)
     {
         if ( this.groups.get(currentID) == void 0)
         {
@@ -78,10 +82,8 @@ export class GroupsModel {
         this.groups.clear();
     }
     
-    readAll()
-    {
- 
-        var groups = [...this.groups]
+    readAll() {
+        const groups = [...this.groups];
         return (groups);
     }
 

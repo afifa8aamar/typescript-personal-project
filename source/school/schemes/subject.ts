@@ -1,5 +1,5 @@
-export interface subject_schema {
+export interface ISubjectSchema {
     title ?: string ;
-    lessons ?: number ; 
+    lessons ?: number ;
     description ?: string ;
 }

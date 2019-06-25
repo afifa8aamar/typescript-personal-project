@@ -1,17 +1,15 @@
-import {subject_schema} from './schemes/subject'
+import {ISubjectSchema} from "./schemes/subject";
 export class SubjectsModel {
-    id ? : string;
-    subject ? :subject_schema;
-    constructor(subject : subject_schema){
-        const f =  () => {return '_' + Math.random().toString(36).substr(2, 9) };
+    public id ?: string;
+    public subject ?: ISubjectSchema;
+    constructor(subject: ISubjectSchema) {
+        const f =  () =>  Math.random().toString(36).substr(2, 9) ;
         this.id = (f()).toString();
-        var title = subject.title;
-        var lessons = subject.lessons;
-        var description = subject.description
+        const title = subject.title;
+        const lessons = subject.lessons;
+        const description = subject.description;
         this.subject = {
-            title, lessons, description
-        }
+            description, lessons, title,
+        };
     }
-
 }
-

@@ -1,9 +1,9 @@
-import { records } from "./record";
+import { IRecords } from "./record";
 
-export interface gradebook_schema{
-    gradebookid ? : string;
-    groupid ?:  string;
+export interface IGradebookSchema {
+    gradebookid ?: string;
+    groupid ?: string;
     level ?: number;
-    record ? : records ;
-    pupilid ? : string;
+    record ?: IRecords;
+    pupilid ?: string;
 }

@@ -1,8 +1,8 @@
-import { pupil_schema } from "./pupil";
+import { IPupilSchema } from "./pupil";
 
-export interface group_schema {
-    id ?: string,
-    room ? : number
-    level ? : number
-    pupils ? : Map<string,pupil_schema>
+export interface IGroupSchema {
+    id ?: string;
+    room ?: number;
+    level ?: number;
+    pupils ?: Map<string, IPupilSchema>;
 }
